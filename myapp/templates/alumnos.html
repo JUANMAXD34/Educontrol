@@ -1,0 +1,359 @@
+{% extends 'layouts/slider.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/alumnos.css' %}">
+{% endblock %}
+
+{% block content-slider %}
+{% if mensaje %}
+<div id="alerta-ok" class="alerta ok">
+    <div>
+        <p>Exito.</p>
+        <p>{{ mensaje }}</p>
+    </div>
+    <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+</div>
+{% endif %}
+<div class="encabezado" id="encabezado">
+    <h1 class="titulo">Consulta de Alumno</h1>
+    <div class="busqueda">
+        <div class="campos-busqueda">
+            <div class="filtro">
+                <div class="filtro-container">
+                    <button class="btn-filtros" onclick="toggleFiltrosGenerales()">Filtros</button>
+                    <button onclick="resetFiltrosGenerales()" class="btn-filtros">Reestablecer</button>
+                    <div class="lista-filtros" id="listaFiltros" style="display:none;">
+                        <label><input type="radio" name="filtro" value="0" checked> ID</label>
+                        <label><input type="radio" name="filtro" value="1"> CURP</label>
+                        <label><input type="radio" name="filtro" value="2"> Nombre Completo</label>
+                        <label><input type="radio" name="filtro" value="3"> Grupo</label>
+                        <label><input type="radio" name="filtro" value="4"> Tutores</label>
+                    </div>
+                    <input type="search" class="buscador" id="buscador" placeholder="Buscar por ID..."
+                        onkeyup="aplicarFiltrosGenerales()">
+                </div>
+            </div>
+        </div>
+        <div class="agregar-datos">
+            <div>
+                <div>
+                    <label for="" class="list">Añadir Alumno</label>
+                </div>
+                <button class="botones" id="abrir-alumno">Agregar</button>
+                <dialog id="modal-alumno">
+                    <div class="barra">
+                        <button id="cerrar-alumno" class="cerrar">X</button>
+                    </div>
+                    <h2 class="titulo">Añadir alumno</h2>
+                    {% if formulario.errors or formulario.non_field_errors %}
+                    <div class="contenido">
+                        <p class="titulo">Error</p>
+                        <ul>
+                            {% for error in formulario.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                            {% for field in formulario %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="añadir-alumno">
+                        <div class="form">
+                            <div>
+                                <label for="" class="label">Nombre(s)</label>
+                                {{formulario.nombre_alumno}}
+                            </div>
+                            <div>
+                                <label for="" class="label">Apellidos</label>
+                                {{formulario.apellidos_alumno}}
+                            </div>
+                            <div>
+                                <label for="" class="label">CURP</label>
+                                {{formulario.curp}}
+                            </div>
+                            <div>
+                                <label for="" class="label">Fecha de nacimiento</label>
+                                {{formulario.fecha_nacimiento}}
+                            </div>
+                            <div>
+                                <label for="" class="label">Direccion</label>
+                                {{formulario.direccion}}
+                            </div>
+                            <div>
+                                <label for="" class="label">Foto</label>
+                                <div class="file-upload">
+                                    <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                        <span id="identificacion-nombre">Selecciona Archivo</span>
+                                        <span class="file-button">Examinar</span>
+                                    </label>
+                                    {{ formulario.foto }}
+                                </div>
+                                <label for="" class="label">Acta de Nacimiento</label>
+                                <div class="file-upload">
+                                    <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                        <span id="identificacion-nombre">Selecciona Archivo</span>
+                                        <span class="file-button">Examinar</span>
+                                    </label>
+                                    {{ formulario.acta_nacimiento }}
+                                </div>
+                                <label for="" class="label">Comprobante de domicilio</label>
+                                <div class="file-upload">
+                                    <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                        <span id="identificacion-nombre">Selecciona Archivo</span>
+                                        <span class="file-button">Examinar</span>
+                                    </label>
+                                    {{ formulario.comprobante_domicilio }}
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label">Grupo</label>
+                                <div class="grupo-inputs">
+                                    <input type="text" id="igiak_grupo_nombre" class="input campos" readonly
+                                        placeholder="Selecciona un grupo">
+                                    <input type="hidden" name="grupo" id="igiak_grupo_id">
+                                    <button type="button" id="igiak_btnBuscarGrupo">Buscar</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label">Tutores</label>
+                                <div class="tutor-inputs">
+                                    <input type="text" id="igiak_tutor_nombres" class="input campos" readonly
+                                        placeholder="Selecciona hasta 3 tutores">
+                                    <input type="hidden" name="tutores" id="igiak_tutor_ids">
+                                    <button type="button" id="igiak_btnBuscarTutor">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button">Añadir</button>
+                    </form>
+                </dialog>
+            </div>
+            <dialog id="igiak_modalGrupo" class="modal">
+                <form method="dialog" class="modal-content">
+                    <h3 class="titulo">Buscar grupo</h3>
+                    <div class="filtro">
+                        <div class="filtro-container">
+                            <button type="button" class="btn-filtros" id="igiak_btnToggleFiltrosGrupo">Filtros</button>
+                            <button type="button" class="btn-filtros"
+                                id="igiak_btnResetFiltrosGrupo">Reestablecer</button>
+                            <div class="lista-filtros" id="igiak_listaFiltrosGrupo" style="display:none;">
+                                <label><input type="radio" name="igiak_filtroGrupo" value="0" checked> ID</label>
+                                <label><input type="radio" name="igiak_filtroGrupo" value="1"> Nombre</label>
+                            </div>
+                            <input type="search" class="buscador-filtro" id="igiak_buscadorGrupo"
+                                placeholder="Buscar..." />
+                        </div>
+                    </div>
+                    <table class="tabla-grupos" id="igiak_tablaGrupos">
+                        <tbody id="igiak_tbodyGrupos">
+                            {% for g in grupos %}
+                            <tr class="fila-grupo" data-id="{{ g.id }}" data-nombre="{{ g }}">
+                                <td>{{ g.id }}</td>
+                                <td>{{ g }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <menu>
+                        <button value="cancel" class="boton">Cerrar</button>
+                    </menu>
+                </form>
+            </dialog>
+            <dialog id="igiak_modalTutor" class="modal">
+                <form method="dialog" class="modal-content">
+                    <h3 class="titulo">Buscar tutores</h3>
+                    <div class="filtro">
+                        <div class="filtro-container">
+                            <button type="button" class="btn-filtros" id="igiak_btnToggleFiltrosTutor">Filtros</button>
+                            <button type="button" class="btn-filtros"
+                                id="igiak_btnResetFiltrosTutor">Reestablecer</button>
+                            <div class="lista-filtros" id="igiak_listaFiltrosTutor" style="display:none;">
+                                <label><input type="radio" name="igiak_filtroTutor" value="0" checked> ID</label>
+                                <label><input type="radio" name="igiak_filtroTutor" value="1"> Nombre</label>
+                                <label><input type="radio" name="igiak_filtroTutor" value="2"> Teléfono</label>
+                                <label><input type="radio" name="igiak_filtroTutor" value="3"> Email</label>
+                            </div>
+                            <input type="search" class="buscador-filtro" id="igiak_buscadorTutor"
+                                placeholder="Buscar..." />
+                        </div>
+                    </div>
+                    <table class="tabla-tutores" id="igiak_tablaTutores">
+                        <tbody id="igiak_tbodyTutores">
+                            {% for t in tutores %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="chk-tutor" data-id="{{ t.id }}"
+                                        data-nombre="{{ t.nombre_tutor }} {{ t.apellidos_tutor }}">
+                                </td>
+                                <td>{{ t.id }}</td>
+                                <td>{{ t.nombre_tutor }} {{ t.apellidos_tutor }}</td>
+                                <td>{{ t.telefono }}</td>
+                                <td>{{ t.email }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <menu>
+                        <button value="cancel" class="boton">Cerrar</button>
+                        <button type="button" id="igiak_btnSeleccionarTutores" class="boton">Seleccionar</button>
+                    </menu>
+                </form>
+            </dialog>
+
+            <div>
+                <div>
+                    <label for="" class="list">Añadir Tutor</label>
+                </div>
+                <button class="botones" id="abrir-tutor">Agregar</button>
+                <dialog id="modal-tutor">
+                    <div class="barra">
+                        <button id="cerrar-tutor" class="cerrar">X</button>
+                    </div>
+                    <h2 class="titulo">Añadir tutor</h2>
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <div class="contenido">
+                        <p class="titulo">Error</p>
+                        <ul>
+                            <li>{{error}}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="añadir-tutor">
+                        <div class="form">
+                            <div>
+                                <label for="{{formulario.correo_electronico.id_for_label}}"
+                                    class="label">Nombre(s)</label>
+                                {{form.nombre_tutor}}
+                            </div>
+                            <div>
+                                <label for="{{formulario.correo_electronico.id_for_label}}"
+                                    class="label">Apellidos</label>
+                                {{form.apellidos_tutor}}
+                            </div>
+                            <div>
+                                <label for="{{formulario.correo_electronico.id_for_label}}"
+                                    class="label">Telefono</label>
+                                {{form.telefono}}
+                            </div>
+                            <div>
+                                <label for="{{formulario.correo_electronico.id_for_label}}" class="label">Correo
+                                    electronico</label>
+                                {{form.email}}
+                            </div>
+                            <div>
+                                <label for="{{formulario.correo_electronico.id_for_label}}" class="label">Relacion con
+                                    el Alumno</label>
+                                {{form.relacion}}
+                            </div>
+                            <div>
+                                <label for="" class="label">Foto</label>
+                                <div class="file-upload">
+                                    <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                        <span id="identificacion-nombre">Selecciona Archivo</span>
+                                        <span class="file-button">Examinar</span>
+                                    </label>
+                                    {{ form.foto }}
+                                </div>
+                            </div>
+                            <div>
+                                <label for="" class="label">INE</label>
+                                <div class="file-upload">
+                                    <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                        <span id="identificacion-nombre">Selecciona Archivo</span>
+                                        <span class="file-button">Examinar</span>
+                                    </label>
+                                    {{ form.ine }}
+                                </div>
+                            </div>
+                            <div>
+                                <label for="" class="label">comprobante de domicilio</label>
+                                <div class="file-upload">
+                                    <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                        <span id="identificacion-nombre">Selecciona Archivo</span>
+                                        <span class="file-button">Examinar</span>
+                                    </label>
+                                    {{ form.comprobante_domicilio }}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button">Añadir</button>
+                    </form>
+                </dialog>
+            </div>
+        </div>
+    </div>
+</div>
+<main id="contenido">
+    <div>
+        <table border="1" class="tabla">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>CURP</th>
+                    <th>Nombre Completo</th>
+                    <th>Grupo</th>
+                    <th>Turno</th>
+                    <th>Tutores</th>
+                    <th>Mas informacion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alumnos in alumno %}
+                <tr>
+                    <td>{{ alumnos.id }}</td>
+                    <td>{{ alumnos.curp }}</td>
+                    <td>{{ alumnos.nombre_alumno }} {{ alumnos.apellidos_alumno }}</td>
+                    <td>{{ alumnos.grupo.nombre_grupo }}</td>
+                    <td>{{ alumnos.grupo.turno }}</td>
+                    <td>
+                        {% for tutor in alumnos.tutores.all %}
+                        {{ tutor.nombre_tutor }} {{ alumnos.apellidos_tutor }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td><a href="/informacion/?id={{alumnos.id}}">Mas informacion</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+<script src="{% static '/javascript/buscador.js' %}"></script>
+<script src="{% static 'javascript/campo.js' %}"></script>
+<script src="{% static 'javascript/file.js' %}"></script>
+{% if error_id %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('modal-tutor');
+        if (modal) {
+            modal.showModal();
+        }
+    });
+</script>
+{% endif %}
+{% if error_id2 %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('modal-alumno');
+        if (modal) {
+            modal.showModal();
+        }
+    });
+</script>
+{% endif %}
+<script>
+    function PDF() {
+        const id = document.getElementById('grupo').value;
+        const url = `/pdf-profe/?id=${encodeURIComponent(id)}`;
+        window.open(url, '_blank')
+    }
+</script>
+{% endblock %}

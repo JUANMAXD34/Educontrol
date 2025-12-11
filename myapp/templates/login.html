@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduControl</title>
+    <link rel="stylesheet" href="{% static '/Styles/login.css' %}">
+    <link rel="icon" href="{% static '/imagenes/logopag.png' %}">
+</head>
+
+<body>
+    <header id="navbar">
+        <div class="left">
+            <div class="brand">
+                <img src="{% static '/imagenes/logopag.png' %}" alt="icon-EduControl" class="logo">
+                <span class="name">EduControl</span>
+            </div>
+        </div>
+        <div class="right">
+            <a href="{% url 'index' %}">
+                <img src="{% static '/imagenes/home.svg'%}" alt="Home">
+            </a>
+            <a href="">
+                <img src="{% static '/imagenes/question.svg'%}" alt="About">
+            </a>
+    </header>
+    <main id="contenido">
+        {% if error %}
+        <div id="alerta-error" class="alerta error">
+            <div class="contenido">
+                <p class="titulo">Error al iniciar sesion</p>
+                <p>{{ error }}</p>
+            </div>
+            <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+        </div>
+        {% endif %}
+        <div class="formulario">
+            <form method="post">
+                {% csrf_token %}
+                <h1>Login</h1>
+                    {% if form.username.errors %}
+                    <div class="error">
+                    {% for error in form.username.errors %}
+                    <div class="contenido">
+                        <ul class="titulo">Error
+                        <li>{{ error }}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                {% if form.password.errors %}
+                <div class="error">
+                    {% for error in form.password.errors %}
+                    <div class="contenido">
+                        <ul class="titulo">Error
+                        <li>{{ error }}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if form.non_field_errors %}
+                <div class="error">
+                    {% for error in form.non_field_errors %}
+                    <div class="contenido">
+                        <ul class="titulo">Error
+                        <li>{{ error }}</li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <div>
+                    <label for="{{form.username.id_for_label}}" class="label">Usuario</label>
+                    {{form.username}}
+                </div>
+                <div>
+                    <label for="{{form.password.id_for_label}}" class="label">Contraseña</label>
+                    {{form.password}}
+                </div>
+                <button>Ingresar</button>
+            </form>
+        </div>
+    </main>
+    <script src="{% static 'javascript/profesores.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+{% extends 'layouts/slider.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/profesores.css' %}">
+{% endblock %}
+
+{% block content-slider %}
+    <div class="encabezado" id="encabezado">
+        <h1 class="titulo">Profesores</h1>
+        {% if error %}
+            <div id="alerta-error" class="alerta error">
+                <div class="contenido">
+                    <p class="titulo">Error al agregar profesor</p>
+                    <p>{{ error }}</p>
+                </div>
+                <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+            </div>
+        {% endif %}
+        {% if mensaje %}
+            <div id="alerta-ok" class="alerta ok">
+                <div class="contenido">
+                    <p class="titulo">Éxito</p>
+                    <p>{{ mensaje }}</p>
+                </div>
+                <button class="cerrar" onclick="cerrarAlerta('alerta-ok')">&times;</button>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="lado-left">
+                <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="buscar_profesor">
+                <select name="grupo" id="grupo" class='listbox'>
+                    {% for profesores in profesor %}
+                        <option value="{{profesores.id}}" class="valor">{{profesores.apellidos_profesor}}  {{profesores.nombre_profesor}}</option>
+                    {% endfor %}
+                </select>
+                <button id="boton" class="boton" type="submit">Buscar</button>
+                </form>
+                <button id="btn" class="boton">Agregar</button>
+                <dialog id="modal" class="ventana">
+                    <div class="barra">
+                        <button id="btn-close">X</button>
+                    </div>
+                    <h1>Agregar Profesor</h1>
+                    <form method="post" class="formulario" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="contenedor">
+                            <input type="hidden" name="form_type" value="agregar_profesor">
+                            <div class="textos">
+                                <label for="">Nombre(s)</label>
+                                <input type="text" name="nombre" id="nombre" maxlength="200"  required>
+                                <label for="">Apellidos</label>
+                                <input type="text" name="apellido" id="apellido" maxlength="200" required>
+                                <label for="">Correo electrónico</label>
+                                <input type="email" name="correo" id="correo" maxlength="200" required>
+                                <label for="">Telefono</label>
+                                <input type="tel" name="numero" id="numero" required>
+                            </div>
+                            <div class="archivos">
+                                <label for="">CURP</label>
+                                <input type="file" name="curp" id="curp" accept=".pdf" required>
+                                <label for="">Comprobante de domicilio</label>
+                                <input type="file" name="comprobante" id="comprobante" accept=".pdf" required>
+                                <label for="">Cedula profesional</label>
+                                <input type="file" name="cedula" id="cedula" accept=".pdf" required>
+                                <label for="">Identificación</label>
+                                <input type="file" name="ine" id="ine" accept=".pdf" required>
+                                <label for="">Foto</label>
+                                <input type="file" name="foto" id="foto" accept=".png" required>
+                            </div>
+                        </div>
+                        <div class="enviar">
+                            <button type="submit">Crear</button>
+                        </div>
+                    </form>
+                </dialog>
+            </div>
+        </div>
+    </div>
+    <main id="contenido">
+            {% if datos %}
+                <div class="dato">
+                    <h3>Datos Generales</h3>
+                    <div class="izquierda">
+                        <img src="{{ datos.foto.url }}" alt="Foto del Profesor" class="img-perfil">
+                    </div>
+                    <div class="derecha">
+                        <label>Nombre completo</label>
+                        <input type="text" disabled value="{{ datos.nombre_profesor }} {{ datos.apellidos_profesor }}">
+                        <label>Teléfono</label>
+                        <input type="text" disabled value="{{ datos.telefono }}">
+                        <label>Correo electrónico</label>
+                        <input type="email" disabled value="{{ datos.correo_electronico }}">
+                        <label>Fecha de registro</label>
+                        <input type="text" disabled value="{{ datos.fecha_registro|date:'d/m/Y H:i' }}">
+                        <label>CURP</label>
+                        <a href="{{ datos.curp.url }}" target="_blank" class="archivo">Ver documento</a>
+                        <label>Comprobante de domicilio</label>
+                        <a href="{{ datos.comprobante_domicilio.url }}" target="_blank" class="archivo">Ver documento</a>
+                        <label>Cédula profesional</label>
+                        <a href="{{ datos.cedula_profesional.url }}" target="_blank" class="archivo">Ver documento</a>
+                        <label>Identificación oficial</label>
+                        <a href="{{ datos.identificacion.url }}" target="_blank" class="archivo">Ver documento</a>
+                        <button onclick="PDF()">Descargar</button>
+                    </div>
+                </div>
+        {% endif %}
+    </main>
+    <script>
+        function mostrarDatos() {
+            const bloque = document.getElementById("dato");
+            bloque.style.display = (bloque.style.display === "none") ? "block" : "none";
+        }
+        function PDF(){
+            const id = document.getElementById('grupo').value;
+            const url = `/pdf-profe/?id=${encodeURIComponent(id)}`;
+            window.open(url,'_blank')
+        }
+        
+    </script>
+    <script src="{% static '/javascript/profesores.js/' %}"></script>
+{% endblock %}

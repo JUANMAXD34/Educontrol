@@ -1,0 +1,164 @@
+{% extends 'layouts/slidercrud.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/crud-grupo.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+{% block content-slider %}
+<main id="contenido">
+    {% if mensaje %}
+    <div id="alerta-ok" class="alerta ok">
+        <div class="contenido">
+            <p class="titulo">Exito</p>
+            <p>{{ mensaje }}</p>
+        </div>
+        <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+    </div>
+    {% endif %}
+    {% if formulario.non_field_errors %}
+    <div id="alerta-error" class="alerta error">
+        {% for error in formulario.non_field_errors %}
+        <div class="contenido">
+            <p class="titulo">Error</p>
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+        <button class="cerrar" onclick="cerrarAlerta('alerta-ok')">&times;</button>
+    </div>
+    {% endif %}
+    <div class="formulario-info">
+        <form action="" method="post" class="formulario">
+            <h1>Grupos</h1>
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="agregar">
+            <div class="campos">
+                <div>
+                    <label for="{{formulario.nombre_grupo.id_for_label}}">{{formulario.nombre_grupo.label}}:</label>
+                    {{formulario.nombre_grupo}}
+                </div>
+                <div>
+                    <label for="{{formulario.grado.id_for_label}}">{{formulario.grado.label}}:</label>
+                    {{formulario.grado}}
+                </div>
+                <div>
+                    <label for="{{formulario.turno.id_for_label}}">{{formulario.turno.label}}:</label>
+                    {{formulario.turno}}
+                </div>
+                <div>
+                    <label for="{{formulario.profesor.id_for_label}}">{{formulario.profesor.label}}:</label>
+                    {{formulario.profesor}}
+                </div>
+            </div>
+            <div class="button">
+                <button class="boton-guardar">Guardar</button>
+            </div>
+        </form>
+        <div>
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Grado</th>
+                        <th>Grupo</th>
+                        <th>Turno</th>
+                        <th>Profesor</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grupos, fgrupo in form %}
+                    <tr>
+                        <td>{{ grupos.id }}</td>
+                        <td>{{ grupos.grado }}</td>
+                        <td>{{ grupos.nombre_grupo }}</td>
+                        <td>{{ grupos.turno }}</td>
+                        <td>{{ grupos.profesor }}</td>
+                        <td class="acciones">
+                            <button class="boton borrar abrir-modal" data-id="{{ grupos.id }}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <dialog id="modal-{{ grupos.id }}">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="borrar">
+                                    <input type="hidden" name="id" value="{{grupos.id}}">
+                                    <h2>¿Estas seguro de borrar este grupo?</h2>
+                                    <button>Borrar</button>
+                                </form>
+                                <button data-id="{{ grupos.id }}" class="boton cerrar-modal">Cancelar</button>
+                            </dialog>
+                            <button class="boton editar abrir-actualizar" data-id="{{ grupos.id }}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+
+                            <dialog id="ventana-modal-{{ grupos.id }}">
+                                <div class="barra">
+                                    <button class="cerrar-actualizar" data-id="{{ grupos.id }}">X</button>
+                                </div>
+                                <form method="post" class="formulario">
+                                    <h1>Grupo {{ grupos.nombre_grupo }}</h1>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="actualizar">
+                                    <input type="hidden" name="id" value="{{ grupos.id }}">
+                                    {% if fgrupo.non_field_errors %}
+                                        <div class="error">
+                                            <p class="titulo">Error</p>
+                                            {% for error in fgrupo.non_field_errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    <div class="campos">
+                                        <div>
+                                            <label for="{{ fgrupo.nombre_grupo.id_for_label }}">
+                                                {{ fgrupo.nombre_grupo.label }}:
+                                            </label>
+                                            {{ fgrupo.nombre_grupo }}
+                                        </div>
+                                        <div>
+                                            <label for="{{ fgrupo.grado.id_for_label }}">
+                                                {{ fgrupo.grado.label }}:
+                                            </label>
+                                            {{ fgrupo.grado }}
+                                        </div>
+                                        <div>
+                                            <label for="{{ fgrupo.turno.id_for_label }}">
+                                                {{ fgrupo.turno.label }}:
+                                            </label>
+                                            {{ fgrupo.turno }}
+                                        </div>
+                                        <div>
+                                            <label for="{{ fgrupo.profesor.id_for_label }}">
+                                                {{ fgrupo.profesor.label }}:
+                                            </label>
+                                            {{ fgrupo.profesor }}
+                                        </div>
+                                    </div>
+
+                                    <div class="button">
+                                        <button class="boton-guardar">Guardar</button>
+                                    </div>
+                                </form>
+                                
+                            </dialog>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</main>
+{% if error_id %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('ventana-modal-{{ error_id }}');
+        if (modal) {
+            modal.showModal();
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

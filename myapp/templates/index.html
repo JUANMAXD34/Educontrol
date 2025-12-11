@@ -1,0 +1,116 @@
+{% extends 'layouts/navbar.html' %}
+{% load static %}
+{% block content %}
+<main id="contenido" class="content">
+    <div class="titulo">
+        <div class="img-index"></div>
+        <div class="objetivo">
+            <h1>EduControl</h1>
+            <h3>EduControl: conecta, controla, crece.</h3>
+            <button id="boton" class="boton" onclick="location.href='#inicio'">Ver más</button>
+        </div>
+    </div>
+    <section id="inicio"></section>
+    <div class="introduccion">
+        <h4 class="titulos">¿Qué es EduControl?</h4>
+        <p>EduControl es un sistema integral de gestión diseñado específicamente para instituciones de nivel preescolar.
+            Su plataforma centraliza el control de alumnos, tutores y docentes, además de ofrecer herramientas seguras y
+            eficientes para la administración de pagos. Con una interfaz intuitiva y adaptable, EduControl optimiza
+            procesos académicos y administrativos, garantizando orden, transparencia y una experiencia confiable para
+            toda la comunidad educativa.</p>
+    </div>
+    <div class="introduccion">
+        <h4>¿Comó funciona EduControl?</h4>
+        <p>EduControl es un sistema integral de gestión académica diseñado para instituciones de nivel preescolar y
+            básico, que centraliza procesos administrativos y académicos en una plataforma segura y fácil de usar. Sus
+            principales funciones incluyen:</p>
+        <div>
+            <h5>Consulta de grupos con listas en PDF</h5>
+            <ul>
+                <li>Permite acceder a la información organizada de cada grupo.</li>
+                <li>Genera automáticamente listas en formato PDF, listas para descarga o impresión.</li>
+                <li>Facilita la administración de asistencia, control de alumnos y comunicación con tutores.</li>
+            </ul>
+        </div>
+        <div>
+            <h5>Pago de colegiaturas con envío de comprobantes por correo</h5>
+            <ul>
+                <li>Los padres o tutores pueden realizar pagos de manera digital.</li>
+                <li>El sistema envía comprobantes de pago directamente al correo registrado, garantizando transparencia
+                    y seguridad.</li>
+            </ul>
+        </div>
+        <div>
+            <h5>Consulta de docentes</h5>
+            <ul>
+                <li>Acceso rápido a la información de cada profesor.</li>
+                <li>Facilita la coordinación académica y administrativa.</li>
+            </ul>
+        </div>
+        <div>
+            <h5>Gestión de tutores, alumnos y docentes</h5>
+            <ul>
+                <li>Función para agregar nuevos registros de manera sencilla.</li>
+                <li>Garantiza que la base de datos esté siempre completa y actualizada.</li>
+                <li>Permite actualizar datos de docentes, grupos, alumnos en tiempo real.</li>
+            </ul>
+        </div>
+    </div>
+</main>
+<div id="redes"></div>
+<footer class="footer">
+    <div class="columnas">
+        <div class="informacion">
+            <h2 class="info-titulo">Más sobre EduControl</h2>
+            <p>EduControl busca ser el sistema de gestión académica más confiable y accesible para instituciones de
+                nivel preescolar y básico, ofreciendo una plataforma intuitiva que centraliza alumnos, tutores y
+                docentes, optimiza procesos administrativos y académicos, garantiza transparencia en pagos y facilita la
+                comunicación. Su objetivo es simplificar la gestión escolar mediante herramientas seguras y eficientes
+                como listas en PDF, comprobantes digitales, credenciales descargables y actualización en tiempo real de
+                la base de datos, brindando orden y confianza a toda la comunidad educativa.</p>
+        </div>
+        <div class="redes">
+            <h2>Redes Sociales</h2>
+            <ul>
+                <li>
+                    <div class="links facebook">
+                        <i class="fa-brands fa-facebook fa-2x">
+                            <a href="">Facebook</a>
+                        </i>
+                    </div>
+                </li>
+                <li>
+                    <div class="links facebook">
+                        <i class="fa-brands fa-instagram fa-2x">
+                            <a href="">Instagram</a>
+                        </i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="contacto">
+            <h2>Contacto</h2>
+            <ul>
+                <li>
+                    <i class="fa-regular fa-envelope">
+                        <p>Juanguzmango01@hotmail.com</p>
+                    </i>
+                </li>
+                <li>
+                    <i class="fa-brands fa-whatsapp">
+                        <p>949234239874928</p>
+                    </i>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="derechos">
+    <p>&copy; 2025 EduControl. Todos los derechos reservados.</p>
+</div>
+<style>
+    .img-index {
+        background-image: url('{% static "imagenes/yiy.jpg" %}');
+    }
+</style>
+{% endblock %}

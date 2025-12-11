@@ -1,0 +1,224 @@
+{% extends 'layouts/slidercrud.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/crud-docente.css' %}">
+{% endblock %}
+{% block content-slider %}
+
+<main id="contenido">
+    <div>
+        <div class="botones">
+            <div class="filtro">
+                <div class="filtro-container">
+                    <button class="btn-filtros" onclick="toggleFiltros()">Filtros</button>
+                    <div class="lista-filtros" id="listaFiltros">
+                        <label><input type="radio" name="filtro" value="0" checked> ID</label>
+                        <label><input type="radio" name="filtro" value="1"> Nombre</label>
+                        <label><input type="radio" name="filtro" value="2"> Edad</label>
+                        <label><input type="radio" name="filtro" value="3"> Teléfono</label>
+                        <label><input type="radio" name="filtro" value="4"> Correo</label>
+                    </div>
+                    <input type="text" class="buscador" id="buscador" placeholder="Buscar por ID..."
+                        onkeyup="filtrarTabla()">
+                </div>
+            </div>
+            <div class="añadir">
+                <button onclick="location.href='{% url 'crud_docente_añadir' 'admin-docente' %}'"
+                    class="button">Añadir</button>
+            </div>
+        </div>
+        <table class="tabla" id="tabla">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre <br>completo</th>
+                    <th>Edad</th>
+                    <th>Telefono</th>
+                    <th>Correo <br>electronico</th>
+                    <th>CURP</th>
+                    <th>Comprobante <br> de <br> Domicilio</th>
+                    <th>Cedula <br>Profesional</th>
+                    <th>Identificacion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for docentes, form in forms %}
+                <tr>
+                    <td>{{docentes.id}}</td>
+                    <td>{{docentes.nombre_profesor}} {{docentes.apellidos_profesor}}</td>
+                    <td>{{docentes.edad}} años</td>
+                    <td>{{docentes.telefono}}</td>
+                    <td>{{docentes.correo_electronico}}</td>
+                    <td><a href="{{docentes.curp.url}}" target="_blank"><i class="fa-regular fa-file"></i></a></td>
+                    <td><a href="{{docentes.comprobante_domicilio.url}}" target="_blank"><i
+                                class="fa-regular fa-file"></i></a></td>
+                    <td><a href="{{docentes.cedula_profesional.url}}" target="_blank"><i
+                                class="fa-regular fa-file"></i></a></td>
+                    <td><a href="{{docentes.identificacion.url}}" target="_blank"><i class="fa-regular fa-file"></i></a>
+                    </td>
+                    <td class="acciones">
+                        <button class="boton borrar abrir-modal" data-id="{{ grupos.id }}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <dialog id="modal-{{ grupos.id }}" class="advertencia">
+                            <h2>¿Estas seguro de borrar este registro?</h2>
+                            <div class="cuadro">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="borrar">
+                                    <input type="hidden" name="id-docente" value="{{docentes.id}}">
+                                    <button class="boton-guardar">Borrar</button>
+                                </form>
+                                <button data-id="{{ grupos.id }}" class="boton-guardar cerrar-modal">Cancelar</button>
+                            </div>
+                        </dialog>
+                        <button class="boton editar abrir-actualizar" data-id="{{ grupos.id }}">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+
+                        <dialog id="ventana-modal-{{ grupos.id }}" class="modal-actualizar">
+                            <div class="barra">
+                                <button class="cerrar-actualizar" data-id="{{ grupos.id }}">X</button>
+                            </div>
+                            <div class="form">
+                                <h2>Docentes</h2>
+                                <form method="post" class="formulario" enctype="multipart/form-data">
+                                    {% if form.errors or form.non_field_errors %}
+                                    <div class="contenido">
+                                        <p class="titulo">Error</p>
+                                        <ul>
+                                            {% for error in form.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                            {% endfor %}
+                                            {% for field in form %}
+                                            {% for error in field.errors %}
+                                            <li>{{ field.label }}: {{ error }}</li>
+                                            {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                    <input type="hidden" name="form_type" value="actualizar">
+                                    <input type="hidden" name="id" value="{{docentes.id}}">
+                                    {% csrf_token %}
+                                    <div class="campos">
+                                        <div class="texto">
+                                            <div>
+                                                <label for="">Nombre del Docente</label>
+                                                {{form.nombre_profesor}}
+                                            </div>
+                                            <div>
+                                                <label for="">Apellidos del Docente</label>
+                                                {{form.apellidos_profesor}}
+                                            </div>
+                                            <div>
+                                                <label for="">Edad</label>
+                                                {{form.edad}}
+                                            </div>
+                                            <div>
+                                                <label for="">Telefono</label>
+                                                {{form.telefono}}
+                                            </div>
+                                            <div>
+                                                <label for="">Correo electronico</label>
+                                                {{form.correo_electronico}}
+                                            </div>
+                                        </div>
+                                        <div class="archivos">
+                                            <div>
+                                                {% if docentes.curp %}
+                                                <p>Archivo actual:
+                                                    <a href="{{ docentes.curp.url }}" target="_blank">Ver documento</a>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="file-upload">
+                                                <label for="">CURP</label>
+                                                <label for="" class="file-label">
+                                                    <span id="curp-nombre">Selecciona un archivo</span>
+                                                    <span class="file-button">Examinar</span>
+                                                </label>
+                                                {{form.curp}}
+                                            </div>
+                                            <div>
+                                                {% if docentes.comprobante_domicilio %}
+                                                <p>Archivo actual:
+                                                    <a href="{{ docentes.comprobante_domicilio.url }}"
+                                                        target="_blank">Ver documento</a>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="file-upload">
+                                                <label for="">Comprobante de domicilio</label>
+                                                <label for="" class="file-label">
+                                                    <span id="comprobante-nombre">Selecciona un archivo</span>
+                                                    <span class="file-button">Examinar</span>
+                                                </label>
+                                                {{form.comprobante_domicilio}}
+                                            </div>
+                                            <div>
+                                                {% if docentes.cedula_profesional %}
+                                                <p>Archivo actual:
+                                                    <a href="{{ docentes.cedula_profesional.url }}" target="_blank">Ver
+                                                        documento</a>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="file-upload">
+                                                <label for="">Cedula profesional</label>
+                                                <label for="" class="file-label">
+                                                    <span id="cedula-nombre">Selecciona un archivo</span>
+                                                    <span class="file-button">Examinar</span>
+                                                </label>
+                                                {{form.cedula_profesional}}
+                                            </div>
+                                            <div>
+                                                {% if docentes.identificacion %}
+                                                <p>Archivo actual:
+                                                    <a href="{{ docentes.identificacion.url }}" target="_blank">Ver
+                                                        documento</a>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="file-upload">
+                                                <label for="">Identificacion</label>
+                                                <label for="" class="file-label">
+                                                    <span id="id-nombre">Selecciona un archivo</span>
+                                                    <span class="file-button">Examinar</span>
+                                                </label>
+                                                {{form.identificacion}}
+                                            </div>
+                                            <div>
+                                                {% if docentes.foto %}
+                                                <p>Archivo actual:
+                                                    <a href="{{ docentes.foto.url }}" target="_blank">Ver foto</a>
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="file-upload">
+                                                <div>
+                                                    <label for="">Foto</label>
+                                                </div>
+                                                <label for="" class="file-label">
+                                                    <span id="foto-nombre">Selecciona un archivo</span>
+                                                    <span class="file-button">Examinar</span>
+                                                </label>
+                                                {{ form.foto }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="boton-guardar">Añadir</button>
+                                </form>
+                            </div>
+                        </dialog>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+<script src="{% static 'javascript/filtros.js' %}"></script>
+
+{% endblock %}

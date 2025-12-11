@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduControl</title>
+    <link rel="stylesheet" href="{% static 'Styles/slider.css' %}">
+    {% block extra_css %}{% endblock %}
+    <link rel="icon"  href="{% static '/imagenes/logopag.png' %}">
+</head>
+<body>
+    <header>
+        <div class="left">
+            <div class="menu-container">
+                <div class="menu" id="menu">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="brand">
+                <img src="{% static '/imagenes/educontrol.png' %}" alt="icon-EduControl" class="logo">
+                <span class="name">EduControl</span>
+            </div>
+        </div>
+        <div class="right">
+            <a href="{% url 'index' %}" class="icons-header">
+                <img src="{% static '/imagenes/home.svg'%}" alt="question">
+            </a>
+            <a href="{% url 'inicio' %}">
+                {% if request.user.is_authenticated and request.user.foto %}
+                    <img src="{{ request.user.foto.url }}" alt="Foto de perfil" class="user"
+                        title="{{request.user.username}}">
+                {% else %}
+                <img src="{% static '/imagenes/login.svg' %}" alt="Sin foto" class="user">
+                {% endif %}
+            </a>
+        </div>
+    </header>
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="{% url 'Lista' %}" class="selected">
+                        <img src="{% static '/imagenes/id-card.svg'%}" alt="Alumnos">
+                        <span>Alumnos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'lista_pagos' %}">
+                        <img src="{% static '/imagenes/money.svg'%}" alt="Colegiaturas">
+                        <span>Colegiatura</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'grupos' %}">
+                        <img src="{% static '/imagenes/people.svg'%}" alt="Grupos-Alumnos">
+                        <span>Grupos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'docente' %}">
+                        <img src="{% static '/imagenes/teacher.svg'%}" alt="Profesores">
+                        <span>Docentes</span>
+                    </a>
+                </li>
+                {% if request.user.is_superuser %}
+                <li>
+                    <a href="{% url 'inicio-admin' %}">
+                        <img src="{% static '/imagenes/admin.svg'%}" alt="Admin">
+                        <span>Panel de administrador</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="logout/">
+                        <img src="{% static '/imagenes/logout.svg'%}" alt="Profesores">
+                        <span>Cerrar Sesion</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% block content-slider %}{% endblock %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="{% static '/Javascript/script.js' %}"></script>
+<script src="{% static '/Javascript/sidebar.js' %}"></script>
+
+</body>
+</html>

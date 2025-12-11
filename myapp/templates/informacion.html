@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informacion</title>
+    <link rel="stylesheet" href="{% static 'styles/informacion.css' %}">
+</head>
+
+<body>
+    <div class="encabezado">
+        <a href="{% url 'Lista' %}" class="btn-volver">⟵ Volver</a>
+    </div>
+    <div class="ficha">
+        <div class="alumno">
+            <h3 class="barra">Datos Generales del alumno</h3>
+            <div class="datos">
+                <div class="imagen">
+                    {% if alumno.foto %}
+                        <img src="{{ alumno.foto.url }}" alt="Foto Alumno" class="foto">
+                    {% endif %}
+                </div>
+                <div class="datos-personales">
+                    <div>
+                        <label class="label">Nombre(s): </label>
+                        <input type="text" disabled value="{{ alumno.nombre_alumno }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">Apellidos: </label>
+                        <input type="text" disabled value="{{ alumno.apellidos_alumno }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">CURP: </label>
+                        <input type="text" disabled value="{{ alumno.curp }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">Fecha de Nacimiento: </label>
+                        <input type="text" disabled value="{{ alumno.fecha_nacimiento }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">Direccion: </label>
+                        <input type="text" disabled value="{{ alumno.direccion }}" class="inputs">
+                    </div>
+                    <div>
+                        <label class="label">Grupo: </label>
+                        <input type="text" disabled value="{{ grupo.nombre_grupo }} - {{ grupo.get_grado_display }}" class="inputs">
+                    </div>
+                    <div>
+                        <label class="label">Turno: </label>
+                        <input type="text" disabled value="{{ grupo.turno }}" class="inputs">
+                    </div>
+                    <div>
+                        <label class="label">Acta de Nacimiento: </label>
+                        {% if alumno.acta_nacimiento %}
+                            <a href="{{ alumno.acta_nacimiento.url }}" target="_blank" class="archivo">Ver documento</a>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="label">Comprobante de domicilio: </label>
+                        {% if alumno.comprobante_domicilio %}
+                            <a href="{{ alumno.comprobante_domicilio.url }}" target="_blank" class="archivo">Ver documento</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tutor">
+            <h3 class="barra">Datos del tutor(es)</h3>
+            {% for tutor in tutores %}
+            <div class="datos">
+                <div class="imagen">
+                    {% if tutor.foto %}
+                        <img src="{{ tutor.foto.url }}" alt="Foto Tutor" class="foto">
+                    {% endif %}
+                </div>
+                <div class="datos-personales">
+                    <div>
+                        <label class="label">Nombre Completo: </label>
+                        <input type="text" disabled value="{{ tutor.nombre_tutor }} {{ tutor.apellidos_tutor }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">Telefono: </label>
+                        <input type="text" disabled value="{{ tutor.telefono }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">Correo Electronico: </label>
+                        <input type="text" disabled value="{{ tutor.email }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">Relacion con el alumno: </label>
+                        <input type="text" disabled value="{{ tutor.get_relacion_display }}" class="input">
+                    </div>
+                    <div>
+                        <label class="label">INE: </label>
+                        {% if tutor.ine %}
+                            <a href="{{ tutor.ine.url }}" target="_blank" class="archivo">Ver documento</a>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="label">Comprobante de domicilio: </label>
+                        {% if tutor.comprobante_domicilio %}
+                            <a href="{{ tutor.comprobante_domicilio.url }}" target="_blank" class="archivo">Ver documento</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p>No hay tutores registrados</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>

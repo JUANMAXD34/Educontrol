@@ -1,0 +1,42 @@
+<h2>Lista de Pagos</h2>
+  <table border="1">
+    <tr>
+      <th>Alumno</th>
+      <th>Mes</th>
+      <th>Monto</th>
+      <th>Fecha de Pago</th>
+      <th>Método</th>
+      <th>Referencia</th>
+      <th>Estado</th>
+      <th>Acción</th>
+    </tr>
+    {% for pago in pagos %}
+    <tr>
+      <td>{{ pago.alumno }}</td>
+      <td>{{ pago.mes }}</td>
+      <td>{{ pago.monto }}</td>
+      <td>{{ pago.fecha_pago }}</td>
+      <td>{{ pago.metodo }}</td>
+      <td>{{ pago.referencia }}</td>
+      <td>{{ pago.estado }}</td>
+      <td>
+        {% if pago.estado == "PENDIENTE" %}
+          <form method="post" style="display:inline;">
+            {% if form.errors %}
+  <div style="color:red;">
+    {{ form.errors }}
+  </div>
+{% endif %}
+
+            {% csrf_token %}
+            <input type="hidden" name="pago_id" value="{{ pago.id }}">
+            {{ form.metodo }} {{ form.referencia }}
+            <button type="submit">Pagar</button>
+          </form>
+        {% else %}
+          ---
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>

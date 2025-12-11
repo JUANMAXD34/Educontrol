@@ -1,0 +1,75 @@
+{% extends 'layouts/pdf.html' %}
+{% load static %}
+{% block content %}
+<div id="contenido-pdf">
+        <div class="logo">
+            <img src="{% static '/imagenes/logopag.png' %}" alt="EduControl Logo">
+        </div>
+
+        <h1>Listado de Alumnos</h1>
+        <div class="info-grupo">
+            Grupo: {{ request.GET.grupo }} &nbsp;|&nbsp; Turno: {{ request.GET.turno }} |&nbsp;
+            {% for alumnos in alumno %}
+            Profesor: {{ alumnos.grupo.profesor }}
+            {% endfor %}
+        </div>
+
+        <table>
+            <tr>
+                <th class="numero">No.</th>
+                <th class="nombre">Alumno</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for alumnos in alumno %}
+            <tr>
+                <td class="numero">{{ forloop.counter }}</td>
+                <td class="nombre">{{ alumnos.nombre_alumno }} {{ alumnos.apellido_alumno }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="footer">
+            Fecha de generación: {{ now|date:"d/m/Y H:i" }}<br>
+            Documento generado automáticamente por EduControl
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+    const grupo = '{{request.GET.grupo}}'
+    const turno = '{{request.GET.turno}}'
+    window.onload = function() {
+        const elemento = document.getElementById('contenido-pdf');
+        const opciones = {
+            margin: 0,
+            filename: `Grupo-${grupo}-${turno}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+        };
+    html2pdf().set(opciones).from(elemento).save().then(() => {
+        setTimeout(() => {
+            window.close();
+        }, 10);
+    });
+};
+</script>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends 'layouts/slider.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/teacher.css' %}">
+{% endblock %}
+{% block content-slider %}
+
+<main id="contenido">
+        {% if mensaje %}
+    <div id="alerta-ok" class="alerta ok">
+        <div>
+            <p>Exito</p>
+            <p>{{ mensaje }}</p>
+        </div>
+        <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+    </div>
+    {% endif %}
+    <div id="content" class="parte">
+        <div class="titulo">
+            <h1>Panel de Docentes</h1>
+        </div>
+        <div class="busqueda">
+            <div class="campos-busqueda">
+                <form action="" method="post" class="campos" >
+                    {% csrf_token %}
+                    
+                    <input type="hidden" name="form_type" value="buscar">
+                    <label class="list-label">Docentes Inscritos</label>
+                    <div>
+                        {{form.nombre_profesor}}
+                        <button class="botones">Buscar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="boton-agregar">
+                <div>
+                    <label for="boton-agregar" class="list-label">Agregar Docentes</label>
+                </div>
+                <button class="botones agregar" name="boton-agregar" id="boton">Agregar</button>
+                <dialog id="modal" class="modal">
+                    <div class="barra">
+                        <button id="btn-cerrar" class="cerrar">X</button>
+                    </div>
+                    <h3 class="formulario-titulo">Agregar Docentes</h3>
+                    <form method="post" class="formulario" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="agregar">
+                        {% if formulario.errors %}
+                            <div class="contenido">
+                                <p class="titulo">Error al registrar al Docente:</p>
+                                <ul>
+                                    {% for field in formulario %}
+                                        {% for error in field.errors %}
+                                            <li>Error: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class="form">
+                            <div>
+                                <div>
+                                    <label for="{{formulario.nombre_profesor.id_for_label}}">Nombre(s)</label>
+                                    {{formulario.nombre_profesor}}
+                                </div>
+                                <div>
+                                    <label for="{{formulario.apellido_profesor.id_for_label}}">Apellidos</label>
+                                    {{formulario.apellidos_profesor}}
+                                </div>
+                                <div>
+                                    <label for="{{formulario.edad.id_for_label}}">Edad</label>
+                                    {{formulario.edad}}
+                                </div>
+                                <div>
+                                    <label for="{{formulario.telefono.id_for_label}}">Numero Telefonico</label>
+                                    {{formulario.telefono}}
+                                </div>
+                                <div>
+                                    <label for="{{formulario.correo_electronico.id_for_label}}">Correo
+                                        Electronico</label>
+                                    {{formulario.correo_electronico}}
+                                </div>
+                            </div>
+                            <div class="formatos">
+                                <div>
+                                    <label for="">CURP</label>
+                                    <div class="file-upload">
+                                        <label for="{{ formulario.curp.id_for_label }}" class="file-label">
+                                            <span id="curp-nombre">Selecciona Archivo</span>
+                                            <span class="file-button">Examinar</span>
+                                        </label>
+                                        {{ formulario.curp }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="">Comprobante de Domicilio</label>
+                                    <div class="file-upload">
+                                        <label for="{{ formulario.comprobante_domicilio.id_for_label }}"
+                                            class="file-label">
+                                            <span id="comprobante-nombre">Selecciona Archivo</span>
+                                            <span class="file-button">Examinar</span>
+                                        </label>
+                                        {{ formulario.comprobante_domicilio }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="">Cedula Profesional</label>
+                                    <div class="file-upload">
+                                        <label for="{{ formulario.cedula_profesional.id_for_label }}"
+                                            class="file-label">
+                                            <span id="cedula-nombre">Selecciona Archivo</span>
+                                            <span class="file-button">Examinar</span>
+                                        </label>
+                                        {{ formulario.cedula_profesional }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="">Identificación</label>
+                                    <div class="file-upload">
+                                        <label for="{{ formulario.identificacion.id_for_label }}" class="file-label">
+                                            <span id="identificacion-nombre">Selecciona Archivo</span>
+                                            <span class="file-button">Examinar</span>
+                                        </label>
+                                        {{ formulario.identificacion }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="">Foto</label>
+                                    <div class="file-upload">
+                                        <label for="{{formulario.foto.id_for_label}}" class="file-label">
+                                            <span id="foto-nombre">Selecciona una imagen</span>
+                                            <span class="file-button">Examinar</span>
+                                        </label>
+                                        {{formulario.foto}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn">
+                            <button class="botones guardar">Agregar</button>
+                        </div>
+                    </form>
+                </dialog>
+            </div>
+        </div>
+    </div>
+    <div>
+        {% if datos %}
+        <div class="dato">
+            <div class="title">
+                <h3>Datos Generales</h3>
+            </div>
+            <div class="izquierda">
+                <div class="imagen">
+                    <img src="{{ datos.foto.url }}" alt="Foto del Profesor" class="img-perfil">
+                </div>
+                <div>
+                    <label>Nombre completo</label>
+                    <input type="text" disabled value="{{ datos.nombre_profesor }} {{ datos.apellidos_profesor }}">
+                    <label>Teléfono</label>
+                    <input type="text" disabled value="{{ datos.telefono }}">
+                    <label>Correo electrónico</label>
+                    <input type="email" disabled value="{{ datos.correo_electronico }}">
+                    <label>Fecha de registro</label>
+                    <input type="text" disabled value="{{ datos.fecha_registro|date:'d/m/Y H:i' }}">
+                </div>
+            </div>
+            <div class="title">
+                <h3>Documentos</h3>
+            </div>
+            <div class="derecha">
+                <div>
+                    <label>CURP</label>
+                    <a href="{{ datos.curp.url }}" target="_blank" class="archivo">Ver documento</a>
+                    <label>Comprobante de domicilio</label>
+                    <a href="{{ datos.comprobante_domicilio.url }}" target="_blank" class="archivo">Ver documento</a>
+                    <label>Cédula profesional</label>
+                    <a href="{{ datos.cedula_profesional.url }}" target="_blank" class="archivo">Ver documento</a>
+                    <label>Identificación oficial</label>
+                    <a href="{{ datos.identificacion.url }}" target="_blank" class="archivo">Ver documento</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% if error_id %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('modal');
+        if (modal) {
+            modal.showModal();
+        }
+    });
+</script>
+{% endif %}
+<script src="{% static 'javascript/script.js' %}"></script>
+
+{% endblock %}

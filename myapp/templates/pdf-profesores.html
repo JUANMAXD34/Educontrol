@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profesor {{profesor.nombre_profesor}}</title>
+    <link rel="stylesheet" href="{% static '/Styles/pdf-profesor.css' %}">
+</head>
+
+<body>
+    <div class="contenido-pdf" id="contenido-pdf">
+        <div class="logo">
+            <img src="{% static '/imagenes/Logo.png' %}" alt="EduControl Logo">
+        </div>
+        <h1>EduControl</h1>
+        <div class="encabezado">
+            <h3 class="barra">Datos Generales</h3>
+            <div class="izquierda">
+                <img src="{{profesor.foto.url}}" alt="Foto-profesor">
+            </div>
+            <div class="derecha">
+                <label>Nombre(s)</label>
+                <input type="text" name="nombre" id="nombre" value="{{profesor.nombre_profesor}}" disabled>
+                <label>Apellidos</label>
+                <input type="text" name="nombre" id="nombre" value="{{profesor.apellidos_profesor}}" disabled>
+                <label>Correo Electronico</label>
+                <input type="text" name="nombre" id="nombre" value="{{profesor.correo_electronico}}" disabled>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        window.onload = function () {
+            const elemento = document.getElementById('contenido-pdf');
+            const opciones = {
+                margin: 0,
+                filename: `Profesor.pdf`,
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 2
+                },
+                jsPDF: {
+                    unit: 'in',
+                    format: 'letter',
+                    orientation: 'portrait'
+                }
+            };
+            html2pdf().set(opciones).from(elemento).save()
+        };
+    </script>
+</body>
+
+</html>

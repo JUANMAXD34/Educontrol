@@ -1,0 +1,249 @@
+{% extends 'layouts/slidercrud.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/crud-usuario.css' %}">
+{% endblock %}
+
+{% block content-slider %}
+{% if delete %}
+<div id="alerta-ok" class="alerta error">
+    <div>
+        <p class="titulo">{{encabezado}}</p>
+        <p>{{ delete }}</p>
+    </div>
+    <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+</div>
+{% endif %}
+{% if mensaje %}
+<div id="alerta-ok" class="alerta ok">
+    <div>
+        <p class="titulo">{{encabezado}}</p>
+        <p>{{ mensaje }}</p>
+    </div>
+    <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+</div>
+{% endif %}
+<main id="contenido">
+    <div class="form">
+        <form class="formulario" method="post" enctype="multipart/form-data">
+            <h1>Crear Usuario</h1>
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="contenido">
+                    <p class="titulo">Error al crear Usuario:</p>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>Error: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <input type="hidden" name="form_type" value="agregar">
+            <div class="campos">
+                <div class="texto">
+                    <div>
+                        <label for="{{form.username.id_for_label}}">Usuario</label>
+                        {{form.username}}
+                        <label for="" class="aviso">El nombre de usuario debe tener al menos 4 caracteres.</label>
+                    </div>
+                    <div>
+                        <label for="{{form.email.id_for_label}}">Correo Electronico</label>
+                        {{form.email}}
+                        <label for="" class="aviso">Debes ingresar un correo electrónico válido (ej.
+                            usuario@dominio.com).</label>
+                    </div>
+                    <div>
+                        <label for="{{form.telefono.id_for_label}}">Telefono</label>
+                        {{form.telefono}}
+                        <label for="" class="aviso">El número telefónico debe contener entre 10 y 15 dígitos
+                            numéricos.</label>
+                    </div>
+                    <div class="file-upload">
+                        <label for="{{form.foto.id_for_label}}" class="file-label">
+                            <span id="foto-nombre">Selecciona una imagen</span>
+                            <span class="file-button">Examinar</span>
+                        </label>
+                        {{form.foto}}
+                        <label class="aviso">Solo se permiten imágenes en formato .png, .jpg o .jpeg. Tamaño máximo
+                            recomendado: 2MB.</label>
+                    </div>
+                </div>
+                <div class="texto">
+                    <div>
+                        <label for="{{form.password.id_for_label}}">Confirmar Contraseña</label>
+                        {{form.password}}
+                        <label for="" class="aviso">La contraseña debe contener letras,numero y @/./+/-/_</label>
+                    </div>
+                    <div>
+                        <label for="{{form.is_staff.id_for_label}}">Admin</label>
+                        {{form.is_staff}}
+                        {% if form.is_staff.errors %}
+                        {% for error in form.is_staff.errors %}
+                        <div class="contenido">
+                            <p class="titulo">Error</p>
+                            <p>{{ error }}</p>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <button class="boton-guardar">Crear</button>
+        </form>
+    </div>
+    <div class="tabla-info">
+        <table class="tabla">
+            <tr>
+                <th>No.</th>
+                <th>Nombre</th>
+                <th>Numero telefonico</th>
+                <th>Correo Electronico</th>
+                <th>Fecha de registro</th>
+                <th>Status</th>
+                <th>Acciones</th>
+            </tr>
+            {% for users, formulario in formulario %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{users.username}}</td>
+                <td>{{users.telefono}}</td>
+                <td>{{users.email}}</td>
+                <td>{{users.date_joined}}</td>
+                {% if users.is_staff == True %}
+                <td>Admin</td>
+                {% else %}
+                <td>Usuario</td>
+                {% endif %}
+                <td class="acciones">
+                    <button class="boton borrar abrir-modal" data-id="{{ forloop.counter }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <dialog class="advertencia" id="modal-{{ forloop.counter }}">
+                        <h1>¿Estas seguro de borrar este registro?</h1>
+                        <div class="cuadro">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{users.id}}">
+                                <input type="hidden" name="form_type" value="borrar">
+                                <button class="boton-guardar">Borrar</button>
+                            </form>
+                            <button data-id="{{ forloop.counter }}" class="boton-guardar cerrar-modal">Cancelar</button>
+                        </div>
+                    </dialog>
+
+                    <button class="boton editar abrir-actualizar" data-id="{{ forloop.counter }}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+
+                    <dialog id="ventana-modal-{{ forloop.counter }}" class="actualizar">
+                        <div class="barra">
+                            <button class="cerrar cerrar-actualizar" data-id="{{ forloop.counter }}">X</button>
+                        </div>
+                        <form method="post" class="formularios" enctype="multipart/form-data">
+                            <h1>Actualizar datos</h1>
+                            {% csrf_token %}
+                            {% if formulario.errors %}
+                            <div class="contenido">
+                                <p class="titulo">Error al actualizar informacion:</p>
+                                <ul>
+                                    {% for field in formulario %}
+                                        {% for error in field.errors %}
+                                            <li>Error: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            <input type="hidden" name="form_type" value="actualizar">
+                            <input type="hidden" name="id" value="{{users.id}}">
+                            <div class="campos">
+                                <div class="texto">
+                                    <div>
+                                        <label for="{{formulario.username.id_for_label}}">Usuario</label>
+                                        {{formulario.username}}
+                                        <label for="" class="aviso">El nombre de usuario debe tener al menos 4
+                                            caracteres.</label>
+                                    </div>
+                                    <div>
+                                        <label for="{{formulario.email.id_for_label}}">Correo Electronico</label>
+                                        {{formulario.email}}
+                                        <label for="" class="aviso">Debes ingresar un correo electrónico válido
+                                            (ej.usuario@dominio.com).</label>
+                                    </div>
+                                    <div>
+                                        <label for="{{formulario.telefono.id_for_label}}">Telefono</label>
+                                        {{formulario.telefono}}
+                                        <label for="" class="aviso">El número telefónico debe contener entre 10 y 15
+                                            dígitos numéricos.</label>
+                                    </div>
+
+                                    <div class="file-upload">
+                                        <label for="{{formulario.foto.id_for_label}}" class="file-label">
+                                            <span id="foto-nombre-{{ forloop.counter }}">Selecciona una imagen</span>
+                                            <span class="file-button">Examinar</span>
+                                        </label>
+                                        {{formulario.foto}}
+                                        <label class="aviso">Solo se permiten imágenes en formato .png, .jpg o .jpeg.
+                                            Tamaño máximo recomendado: 2MB.</label>
+                                    </div>
+
+                                </div>
+                                <div class="texto">
+                                    <div>
+                                        <label for="{{formulario.is_staff.id_for_label}}">Admin</label>
+                                        {{formulario.is_staff}}
+                                    </div>
+                                    {% if users.foto %}
+                                    <div class="foto">
+                                        <p>Foto actual:</p>
+                                        <img src="{{ users.foto.url }}" alt="Foto actual" title="Foto del usuario">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <button class="boton-guardar">actualizar</button>
+                        </form>
+                    </dialog>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</main>
+{% if error_id %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('ventana-modal-{{ error_id }}');
+        if (modal) {
+            modal.showModal();
+        }
+    });
+</script>
+{% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fotoInput = document.getElementById('{{ form.foto.auto_id }}');
+        const nombreSpan = document.getElementById('foto-nombre');
+        fotoInput.addEventListener('change', function () {
+            const archivo = this.files[0];
+            const nombre = archivo ?.name||'Selecciona una imagen';
+            nombreSpan.textContent = nombre;
+        });
+        const formularios = document.querySelectorAll('.formularios');
+        formularios.forEach((formulario, index) => {
+            const input = formulario.querySelector('input[type="file"]');
+            const nombreSpan = formulario.querySelector(`#foto-nombre-${index + 1}`);
+            if (input && nombreSpan) {
+                input.addEventListener('change', function () {
+                    const archivo = this.files[0];
+                    const nombre = archivo?.name||'Selecciona una imagen';
+                    nombreSpan.textContent = nombre;
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

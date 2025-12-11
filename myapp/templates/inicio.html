@@ -1,0 +1,21 @@
+{% extends 'layouts/slider.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/inicio.css' %}">
+{% endblock %}
+{% block content-slider %}
+<main id="contenido">
+    <div class="perfil">
+        <div class="imagen-perfil">
+            {% if request.user.is_authenticated and request.user.foto %}
+            <img src="{{ request.user.foto.url }}" alt="Foto de perfil"  class="imagen" title="{{request.user.username}}">
+            {% endif %}
+        </div>
+        <div class="usuario-perfil">
+            {% if request.user.is_authenticated and request.user.username %}
+                <h3>¡Bienvenido de nuevo, {{request.user.username}}!</h3>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

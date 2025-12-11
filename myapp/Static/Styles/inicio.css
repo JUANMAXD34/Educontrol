@@ -1,0 +1,25 @@
+body{
+    height: 0px;
+}
+.perfil{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    margin-top: 50px;
+}
+.imagen-perfil{
+    display: flex;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.imagen-perfil .imagen{
+    height: 400px;
+    width: 400px;
+    border-radius: 100%;
+}
+h3{
+    text-align: center;
+    font-size: 2.3rem;
+    color: var(--text-title-color);
+    font-family: "Poppins", sans-serif;
+}

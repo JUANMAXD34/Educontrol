@@ -1,0 +1,528 @@
+*{
+    font-family: "Poppins", sans-serif;
+}
+main{
+    padding: 0px;
+}
+.titulo h1{
+    text-align: center;
+    font-size: 2.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    color: var(--text-title-color);
+}
+.parte{
+    width: 100%;
+    height: 200px;
+    background-color: #ccc;
+    padding: 20px;
+    background-color: #80bfff;
+}
+.busqueda{
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    width: 100%;
+    padding: 0px 20px 0px 20px;
+}
+.campos .list-label {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    width: 150px;
+    color: var(--text-title-color);
+}
+.campos .list {
+    width: 50%;
+    padding: 12px 16px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.2rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+}
+.botones{
+    width: 176px;
+    padding: 12px 16px;
+    background-color: #0077cc;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn{
+    width: 100%;
+    padding: 20px;
+}
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+.guardar{
+    width: 100%;
+}
+.boton-agregar{
+  margin-top: 20px;
+}
+.boton-agregar .list-label{
+  font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    width: 150px;
+    color: var(--text-title-color);
+}
+.dato{
+  display: grid;
+  width: 80%;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border: 2px solid #e0e0e0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  animation: aparecer 0.5s ease-out;
+}
+.title h3{
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: var(--text-title-color);
+}
+.imagen{
+  width: 300px;
+  height: 300px;
+}
+.img-perfil{
+  width: 300px;
+  height: 300px;
+  border-radius: 15px;
+}
+.izquierda{
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  padding: 20px;
+  gap: 10px;
+}
+.izquierda label {
+    font-weight: 500;
+    color: #34495e;
+    font-family: "Poppins", sans-serif;
+}
+.izquierda input {
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f4f4f4;
+  font-size: 16px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+.derecha{
+  display: flex;
+  padding: 10px;
+  margin: auto;
+}
+.derecha label {
+  font-weight: 500;
+  color: #34495e;
+}
+.archivo {
+  width: 100%;
+    display: inline-block;
+    padding: 6px 10px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+.archivo:hover {
+    background-color: #2980b9;
+}
+
+.modal{
+    margin: auto;
+    animation: fadeSlideUp 0.4s ease-out forwards;
+    border: 1px solid white;
+    border-radius: 15px;
+}
+.formulario label {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    width: 150px;
+    color: var(--text-title-color);
+}
+.formulario div{
+    margin-top: 10px;
+}
+.barra {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+.barra .cerrar {
+    border: none;
+    background-color: white;
+    color: gray;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.formulario-titulo{
+    color: var(--text-title-color);
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+}
+.formulario input {
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 12px;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.2rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+}
+.list:hover{
+    outline: none;
+    border: 2px solid #007bff; 
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+}
+input:hover {
+    outline: none;
+    border: 2px solid #007bff; 
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+}
+.list:focus{
+    outline: none;
+    border: 2px solid #007bff; 
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+}
+input:focus {
+    outline: none;
+    border: 2px solid #007bff; 
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+}
+
+.form{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    padding: 8px 20px;
+    gap: 20px;
+}
+.file-upload {
+    position: relative;
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+}
+
+.file-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.formulario .file-label{
+    width: 100%;
+    color: white;
+}
+.formulario .file-label{
+    width: 100%;
+    color: white;
+}
+
+.file-label:hover {
+    background-color: #0056b3;
+}
+
+.file-button {
+    background-color: #0056b3;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.aviso-input {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #555;
+}
+.alerta {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    animation: fadeIn 0.4s ease-out;
+    font-family: 'Segoe UI', sans-serif;
+    max-width: 300px;
+}
+
+.alerta .icono {
+    font-size: 24px;
+}
+
+.alerta .contenido {
+    flex-grow: 1;
+}
+
+.alerta .titulo {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.alerta .cerrar {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit;
+}
+
+.alerta.error {
+    background-color: #fdecea;
+    border: 1px solid #f5c2c7;
+    color: #b02a37;
+}
+
+.alerta.ok {
+    background-color: #e6f4ea;
+    border: 1px solid #a3d9a5;
+    color: #2e7d32;
+}
+@keyframes aparecer {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeSlideDown {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+}
+
+.animate-in {
+    animation: fadeSlideUp 0.4s ease-out forwards;
+}
+
+.animate-out {
+    animation: fadeSlideDown 0.3s ease-in forwards;
+}
+.contenido {
+    width: 100%;
+    background-color: #f57769;
+    padding: 10px;
+    text-align: justify;
+    border-radius: 8px;
+}
+
+.contenido .titulo {
+    text-align: center;
+    font-size: 1.3rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: white;
+}
+
+.contenido ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.contenido li {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: white;
+}
+@media (max-width: 500px) {
+    .titulo h1 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .parte {
+        height: auto;
+        padding: 15px;
+    }
+
+    .busqueda {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .campos .list-label {
+        font-size: 1rem;
+        width: 100%;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .campos .list {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .botones {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .dato {
+        width: 95%;
+        margin: 15px auto;
+        padding: 10px;
+    }
+
+    .title h3 {
+        font-size: 1.2rem;
+    }
+
+    .imagen,
+    .img-perfil {
+        width: 100%;
+        height: auto;
+        max-width: 250px;
+        margin: auto;
+    }
+
+    .izquierda {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .derecha {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .modal {
+        width: 95%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .formulario label {
+        font-size: 1rem;
+        width: 100%;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .formulario input {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .form {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .file-label {
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .file-button {
+        margin-top: 8px;
+        font-size: 0.8rem;
+    }
+
+    .barra {
+        justify-content: flex-end;
+    }
+
+    .barra .cerrar {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .formulario-titulo {
+        font-size: 1.5rem;
+    }
+
+    .aviso-input {
+        font-size: 0.8rem;
+    }
+}

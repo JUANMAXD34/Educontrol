@@ -1,0 +1,215 @@
+{% extends 'layouts/slider.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/colegiatura.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+{% block content-slider %}
+<main id="contenido">
+    {% if mensaje %}
+        <div id="alerta-ok" class="alerta ok">
+            <div>
+                <p>Exito</p>
+                <p>{{ mensaje }}</p>
+            </div>
+            <button class="cerrar" onclick="cerrarAlerta('alerta-error')">&times;</button>
+        </div>
+    {% endif %}
+    {% if pago_seleccionado == None %}
+    <div class="cabeza">
+        <h2>Pagar colegiatura</h2>
+        {% if formulario.non_field_errors %}
+        {% for error in formulario.non_field_errors %}
+        <div class="contenido">
+            <p class="titulo">Error</p>
+            <ul>
+                <li>{{error}}</li>
+            </ul>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form action="" method="post" class="form-pago">
+            {% csrf_token %}
+            <div>
+            <label>Alumno</label>
+                <div class="alumno-inputs">
+                <input type="text" id="igiak_alumno_nombre" class="input campos" readonly placeholder="Selecciona un alumno">
+                <input type="hidden" name="alumno" id="igiak_alumno_id">
+                <button type="button" id="igiak_btnBuscarAlumno">Buscar</button>
+                </div>
+            </div>
+            <div>
+                <label>{{ formulario.monto.label }}</label>
+                {{ formulario.monto }}
+            </div>
+            <div>
+                <label>{{ formulario.fecha_pago.label }}</label>
+                {{ formulario.fecha_pago }}
+            </div>
+            <div>
+                <label>{{ formulario.metodo.label }}</label>
+                {{ formulario.metodo }}
+            </div>
+            <div>
+                <label>{{ formulario.referencia.label }}</label>
+                {{ formulario.referencia }}
+            </div>
+            <div>
+                <label>{{ formulario.estado.label }}</label>
+                {{ formulario.estado }}
+            </div>
+            <button>Registrar</button>
+        </form>
+        <dialog id="igiak_modalAlumno" class="modal">
+            <form method="dialog" class="modal-content">
+                <h3>Buscar alumno</h3>
+                <div class="filtro">
+                    <div class="filtro-container">
+                        <button type="button" class="btn-filtros" id="igiak_btnToggleFiltros">Filtros</button>
+                        <button type="button" class="btn-filtros" id="igiak_btnResetFiltros">Reestablecer</button>
+                        <div class="lista-filtros" id="igiak_listaFiltros" style="display:none;">
+                            <label><input type="radio" name="igiak_filtro" value="0" checked> ID</label>
+                            <label><input type="radio" name="igiak_filtro" value="1"> Alumno</label>
+                            <label><input type="radio" name="igiak_filtro" value="2" > Grupo</label>
+                        </div>
+                        <input type="search" class="buscador-alumno" id="igiak_buscador" placeholder="Buscar..." />
+                    </div>
+                </div>
+                <table class="tabla-alumnos" id="igiak_tablaAlumnos">
+                    <tbody id="igiak_tbodyAlumnos">
+                        {% for a in alumnos %}
+                            <tr class="fila-alumno" data-id="{{ a.id }}" data-nombre="{{ a.nombre_alumno }} {{ a.apellidos_alumno }}" data-grupo="{{ a.grupo }}">
+                                <td>{{ a.id }}</td>
+                                <td>{{ a.nombre_alumno }} {{ a.apellidos_alumno }}</td>
+                                <td>{{ a.grupo }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <menu>
+                    <button value="cancel">Cerrar</button>
+                </menu>
+            </form>
+        </dialog>
+    </div>
+    {% endif %}
+    {% if pago_seleccionado %}
+    <div class="cabeza">
+        <h2>Pagar {{ pago_seleccionado.mes }} - {{ pago_seleccionado.alumno }}</h2>
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="contenido">
+            <p class="titulo">Error</p>
+            <ul>
+                <li>{{error}}</li>
+            </ul>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form method="post" class="form-pago">
+            {% csrf_token %}
+            {% if form.errors %} <div style="color:red;"> {{ form.errors }} </div> {% endif %}
+            <input type="hidden" name="pago_id" value="{{ pago_seleccionado.id }}">
+            {{form}}
+            <button type="submit">Confirmar Pago</button>
+        </form>
+    </div>
+    {% endif %}
+    <div class="filtro">
+        <div class="filtro-container">
+            <button class="btn-filtros" onclick="toggleFiltrosGenerales()">Filtros</button>
+            <button onclick="resetFiltrosGenerales()" class="btn-filtros">Reestablecer</button>
+            <div class="lista-filtros" id="listaFiltros" style="display:none;">
+                <label><input type="radio" name="filtro" value="0" checked> ID</label>
+                <label><input type="radio" name="filtro" value="1"> Alumno</label>
+                <label><input type="radio" name="filtro" value="2"> Mes</label>
+                <label><input type="radio" name="filtro" value="3"> Monto</label>
+                <label><input type="radio" name="filtro" value="4"> Fecha de Pago</label>
+                <label><input type="radio" name="filtro" value="5"> Método</label>
+                <label><input type="radio" name="filtro" value="6"> Referencia</label>
+                <label><input type="radio" name="filtro" value="7"> Estado</label>
+            </div>
+            <input type="search" class="buscador" id="buscador" placeholder="Buscar por ID..." onkeyup="aplicarFiltrosGenerales()">
+        </div>
+    </div>
+    <div class="filtro-fechas">
+        <label>Desde:</label>
+        <input type="date" id="desde">
+        <label>Hasta:</label>
+        <input type="date" id="hasta">
+        <button onclick="aplicarFiltrosGenerales()" class="acciones-filtros">Filtrar</button>
+    </div>
+    <h2>Lista de Pagos</h2>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Alumno</th>
+                <th>Mes</th>
+                <th>Monto</th>
+                <th>Fecha de Pago</th>
+                <th>Método</th>
+                <th>Referencia</th>
+                <th>Estado</th>
+                <th>Pagar</th>
+                <th>Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos %}
+            <tr>
+                <td>{{pago.id}}</td>
+                <td>{{ pago.alumno }}</td>
+                <td>{{ pago.mes }}</td>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.fecha_pago }}</td>
+                <td>{{ pago.metodo }}</td>
+                <td>{{ pago.referencia }}</td>
+                <td {% if pago.estado == "PENDIENTE" %} style="background-color: #e36b77;" 
+                {% elif pago.estado == 'VENCIDO' %} style="background-color: #ecb865;"
+                {% elif pago.estado == "PAGADO" %} style="background-color: #58e25f;" 
+                {% endif %}>{{ pago.estado }}
+                </td>
+                <td>
+                    {% if pago.estado == "PENDIENTE" %}
+                    <a href="?pago_id={{ pago.id }}" class="pagar">
+                        <img src="{% static '/imagenes/money.svg'%}" alt="Colegiaturas" class="pagar">
+                    </a>
+                    {% else %}
+                    ---
+                    {% endif %}
+                </td>
+                <td>
+                    <input type="hidden" id="colegiatura_id_{{pago.id}}" value="{{pago.id}}">
+                    <a href="#" onclick="PDF({{pago.id}}); return false;">
+                        <i class="fa-regular fa-file-pdf"></i>
+                    </a>
+                    <i class="fa-regular fa-envelope"></i>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination" id="paginacion"></div>
+</main>
+<script src="{% static 'javascript/colegiatura.js' %}"></script>
+<script src="{% static 'javascript/busqueda.js' %}"></script>
+<script>
+    function cerrarAlerta(id) {
+    const alerta = document.getElementById(id);
+    if (alerta) {
+        alerta.style.opacity = '0';
+        setTimeout(() => alerta.remove(), 500);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => cerrarAlerta('alerta-error'), 4000);
+    setTimeout(() => cerrarAlerta('alerta-ok'), 4000);
+});
+function PDF(id){
+    const url = `/pdf-factura/?colegiatura_id=${encodeURIComponent(id)}`;
+    window.open(url,'_blank');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    list-style: none;
+}
+.invoice {
+    max-width: 800px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+.invoice-header {
+    position: relative;
+    height: 150px;
+}
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.invoice-content {
+    position: relative;
+    top: -50px;
+    max-width: 700px;
+    margin: auto;
+}
+.row {
+    display: flex;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+        transform: translateY(-50px);
+}
+.logo img {
+    max-width: 150px;
+}
+h2 {
+    font-size: 17px;
+}
+.data-client {
+    margin: 20px;
+    transform: translateY(-20px);
+}
+.data-client h3 {
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+.date-number {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
+    transform: translateY(-20px);
+}
+.table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+    transform: translateY(-20px);
+}
+.table th {
+    background: #333;
+    color: #fff;
+}
+.table th, .table td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+}
+.summary {
+    margin: 20px;
+}
+.totals {
+    margin: 20px;
+    text-align: right;
+}
+.totals ul li {
+    list-style: none;
+    margin: 5px 0;
+}
+.invoice-footer {
+    position: relative;
+    height: 150px;
+    margin-top: 40px;
+}
+.company {
+    padding: 0 20px 20px 20px;
+    line-height: normal;
+    color: #000;
+}
+.signature {
+    text-align: center;
+    margin: 20px 0;
+}
+.line {
+    width: 40%;
+}
+.bussines-info {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.bussines-info, .client {
+    padding: 0;
+    list-style: none;
+    line-height: 1.5;
+}
+.footer.background {
+    position: relative;
+    height: 150px;
+    background: linear-gradient(to left, #445df1 70%, #a708eb 30%);
+    clip-path: polygon(0 50%, 100% 0,100% 100%, 0 100%);
+}

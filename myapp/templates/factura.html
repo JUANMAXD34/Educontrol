@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura</title>
+    <link rel="stylesheet" href="{% static 'styles/factura.css' %}">
+</head>
+
+<body>
+<div class="invoice" id="contenido-pdf">
+
+    <header class="invoice-header">
+        <div class="hero-background"></div>
+    </header>
+
+    <div class="invoice-content">
+
+        <div class="row">
+            <div class="col-left"></div>
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://i.postimg.cc/yk3CG0ms/educontrol.png" alt="">
+                    <h2>Educontrol</h2>
+                </div>
+            </div>
+        </div>
+
+        <section class="data-client">
+            <h3>Datos del Cliente</h3>
+            <ul class="client">
+                <li><strong>Alumno: </strong>{{ alumno.nombre_alumno }} {{ alumno.apellidos_alumno }}</li>
+                {% for tutor in tutores %}
+                    <li><strong>Tutor: </strong>{{ tutor.nombre_tutor }} {{ tutor.apellidos_ptutor }}</li>
+                    <li><strong>Email: </strong>{{ tutor.email }}</li>
+                    <li><strong>Teléfono: </strong>{{ tutor.telefono }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="date-number">
+            <p><strong>Número: </strong>{{ colegiatura.id }}</p>
+            <p><strong>Fecha: </strong>{{ colegiatura.fecha_pago|date:"d/m/Y" }}</p>
+        </section>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cantidad</th>
+                    <th>Concepto</th>
+                    <th>Descripción</th>
+                    <th>Importe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Pago de colegiatura mensual de {{ colegiatura.mes }}</td>
+                    <td>Alumno: {{ alumno.nombre_alumno }} {{ alumno.apellidos_alumno }}</td>
+                    <td>$ {{ colegiatura.monto }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="summary">
+            <p><strong>Forma de pago: </strong>{{ colegiatura.metodo }}</p>
+        </div>
+
+        <section class="totals">
+            <ul class="total">
+                <li><strong>Subtotal: </strong>$ {{ colegiatura.monto }}</li>
+                <li><strong>IVA: </strong>$ 0.00</li>
+                <li><strong>Total: </strong>$ {{ colegiatura.monto }}</li>
+            </ul>
+        </section>
+
+        <footer class="invoice-footer">
+            <div class="company">
+                <div class="signature">
+                    <hr class="line">
+                    <p>Firma y sello</p>
+                </div>
+                <ul class="bussines-info">
+                    <li>EduControl</li>
+                    <li>Email: educontrol@hotmail.com</li>
+                    <li>Teléfono: 32040234324</li>
+                </ul>
+            </div>
+        </footer>
+        <div class="footer-background"></div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+    window.onload = function () {
+    const elemento = document.getElementById('contenido-pdf');
+
+    const opciones = {
+        margin: 0,
+        filename: 'factura.pdf',
+        image: { type: 'png', quality: 1 },
+        html2canvas: {
+            scale: 3,
+            useCORS: true
+        },
+        jsPDF: {
+            unit: 'px',
+            format: [elemento.offsetWidth, elemento.offsetHeight],
+            orientation: 'portrait'
+        }
+    };
+
+    html2pdf().set(opciones).from(elemento).save().then(() => {
+        setTimeout(() => {
+            window.close();
+        }, 10);
+    });
+};
+</script>
+</body>
+</html>

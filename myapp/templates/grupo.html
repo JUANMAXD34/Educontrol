@@ -1,0 +1,65 @@
+{% extends 'layouts/slider.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Styles/grupo.css' %}">
+{% endblock %}
+
+{% block content-slider %}
+<div class="encabezado" id="encabezado">
+        <h1 class="titulo">Consulta de Grupos</h1>
+        <div class="row">
+            <div class="lado-left">
+                <select name="grupo" id="Grupo" class="select">            
+                    <option value="1A">1A</option>
+                    <option value="1B">1B</option>
+                    <option value="1C">1C</option>
+                    <option value="2A">2A</option>
+                    <option value="2B">2B</option>
+                    <option value="2C">2C</option>
+                    <option value="3A">3A</option>
+                    <option value="3B">3B</option>
+                    <option value="3C">3C</option>
+                </select>
+                <select name="turno" id="Turno" class="select">
+                    <option value="Matutino">Matutino</option>
+                    <option value="Vespertino">Vespertino</option>
+                </select>
+            </div>
+            <div class="lado-right">
+                <button id="boton" type="submit" class="boton">Buscar</button>
+                <button onclick="PDF()" class="boton">Descargar</button>
+            </div>
+        </div>
+</div>
+<main id="contenido">
+    <table id="tablaGrupos" class="tabla">
+        <tr>
+            <th>No.</th>
+            <th>Alumno</th>
+            <th>Grupo</th>
+            <th>Turno</th>
+            <th>Profesor</th>
+        </tr>
+        {% for alumnos in alumno %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ alumnos.nombre_alumno }}  {{ alumnos.apellido_alumno }}</td>
+            <td>{{ alumnos.grupo.nombre_grupo }}</td>
+            <td>{{ alumnos.grupo.turno }}</td>
+            <td>{{ alumnos.grupo.profesor }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</main>
+<script src="{% static '/Javascript/tabla.js' %}"></script>
+<script>
+function PDF() {
+    const grupo = document.getElementById('Grupo').value;
+    const turno = document.getElementById('Turno').value;
+    const url = `/generar-pdf/?grupo=${encodeURIComponent(grupo)}&turno=${encodeURIComponent(turno)}`;
+    window.open(url, '_blank');
+}
+</script>
+
+{% endblock %}

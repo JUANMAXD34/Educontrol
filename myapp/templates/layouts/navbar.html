@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduControl</title>
+    <link rel="stylesheet" href="{% static '/Styles/style.css' %}">
+    <link rel="stylesheet" href="{% static '/Styles/index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="{% static '/imagenes/logopag.png' %}">
+</head>
+
+<body>
+    <header id="navbar">
+        <div class="left">
+            <div class="brand">
+                <img src="{% static '/imagenes/educontrol.png' %}" alt="icon-EduControl" class="logo"
+                    title="EduControl">
+                <span class="name">EduControl</span>
+            </div>
+        </div>
+        <div class="right">
+            <a href="#" onclick="location.href='#contenido'">
+                <img src="{% static '/imagenes/home.svg'%}" alt="Home">
+            </a>
+            <a href="#" onclick="location.href='#redes'">
+                <img src="{% static '/imagenes/question.svg'%}" alt="About">
+            </a>
+            <a href="{% url 'login' %}">
+                {% if request.user.is_authenticated and request.user.foto %}
+                <img src="{{ request.user.foto.url }}" alt="Foto de perfil" class="user"
+                    title="{{request.user.username}}">
+                {% else %}
+                <img src="{% static '/imagenes/login.svg' %}" alt="Sin foto" class="user">
+                {% endif %}
+            </a>
+    </header>
+    {% block content %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,265 @@
+html{
+    scroll-behavior: smooth;
+}
+#contenido{
+    margin-top: 65px;
+}
+section{
+    height: 60px;
+}
+.titulo{
+    position: relative;
+    width: 100%;
+    height: 750px;
+    margin-bottom: 30px;
+}
+.objetivo{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-0%, -70%);
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    opacity: 1;
+}
+h1{
+    color: var(--text-title-color);
+    font-weight: 800;
+    font-size: 3rem;
+}
+h3{
+    color: var(--text-title-color);
+    font-weight: 700;
+    font-size: 2rem;
+}
+h4{
+    color: var(--text-title-color);
+    font-weight: 700;
+    font-size: 2.1rem;
+    padding: 5px;
+}
+.img-index {
+    width: 100%;
+    height: 750px;
+    background-size: contain;
+    background-color: #69B3E4;
+    background-repeat: no-repeat; 
+    background-position: left;
+    image-rendering: auto;     
+}
+.boton{
+    margin-top: 5px;
+    padding: 12px 16px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.boton:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+}
+
+.boton:active {
+    transform: scale(0.98);
+}
+.introduccion{
+    width: 80%;
+    margin: auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+.introduccion div{
+    padding: 10px;
+}
+.introduccion h5{
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-align: justify;
+}
+.introduccion ul{
+    margin-left: 20px;
+}
+.introduccion li{
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    text-align: justify;
+    padding: 5px;
+}
+.introduccion p{
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    text-align: justify;
+    padding: 5px;
+}
+.footer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 450px;
+    padding: 40px;
+    background-color: white;
+    margin-top: 250px;
+}
+.columnas{
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+}
+.columnas h2{
+    font-size: 1.3rem;
+    color: var(--text-title-color);
+    font-weight: 800;
+    border-bottom:  3px solid var(--text-title-color);
+    padding: 2px;
+    text-align: center;
+}
+.derechos{
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-color: whitesmoke;
+}
+.informacion{
+    width: 600px;
+    height: 300px;
+
+}
+.informacion p{
+    padding: 10px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-align: justify;
+}
+.redes{
+    width: 200px;
+    height: 300px;
+    color: black;
+}
+.columnas ul{
+    list-style: none;
+    margin-left: 20px;
+    padding: 20px;
+}
+.columnas li{
+    margin-bottom: 20px;
+}
+.redes a{
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+}
+.contacto{
+    width: 400px;
+}
+.links{
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.facebook:hover{
+    transform: scale(1.1);
+    color: #007bff;
+}
+@media (max-width: 500px) {
+    #contenido {
+        margin-top: 40px;
+    }
+
+    section {
+        height: auto;
+        padding: 10px;
+    }
+
+    .titulo {
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .objetivo {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 90%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.3rem;
+    }
+
+    .img-index {
+        height: 250px;
+        background-position: center;
+    }
+
+    .boton {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .introduccion {
+        width: 95%;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .introduccion h5,
+    .introduccion li,
+    .introduccion p {
+        font-size: 1rem;
+    }
+
+    .footer {
+        height: auto;
+        padding: 10px;
+        margin-top: 100px;
+    }
+
+    .columnas {
+        flex-direction: column;
+        gap: 0px;
+        align-items: center;
+    }
+
+    .informacion,
+    .redes,
+    .contacto {
+        width: 100%;
+        height: auto;
+    }
+
+    .informacion p {
+        font-size: 0.8rem;
+    }
+
+    .redes a {
+        font-size: 18px;
+    }
+
+    .derechos {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
